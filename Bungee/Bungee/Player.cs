@@ -53,9 +53,10 @@ namespace Bungee
             #endregion
 
             #region jumping
-            if (currentKeyboard.IsKeyDown(Keys.Up)&& oldKeyboard.IsKeyUp(Keys.Up))
+            if (currentKeyboard.IsKeyDown(Keys.Enter)&& oldKeyboard.IsKeyUp(Keys.Enter))
             {
                 velocity.Y -= 10;
+                velocity.X += 10;
             }
             #endregion
 
@@ -68,7 +69,7 @@ namespace Bungee
 
             #region collision detection
 
-            if (currentRectangle.Bottom+velocity.Y > rampRectangle.Top)
+            if (currentRectangle.Bottom+velocity.Y > rampRectangle.Top && currentRectangle.Left < rampRectangle.Right)
             {
                 velocity = new Vector2(0);
             }
@@ -78,6 +79,7 @@ namespace Bungee
             #region updating position
             currentRectangle.X += (int)velocity.X;
             currentRectangle.Y += (int)velocity.Y;
+            velocity.X -= velocity.X * 0.05f;
             #endregion
         }
 
