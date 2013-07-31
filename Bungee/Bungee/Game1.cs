@@ -31,6 +31,9 @@ namespace Bungee
         Ramp ramp;
         Player player;
 
+        bool freeze=false;
+        int slowdown = 0;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -89,7 +92,27 @@ namespace Bungee
             oldKeyboard = currentKeyboard;
             currentKeyboard = Keyboard.GetState();
 
-            player.Update(oldKeyboard, currentKeyboard);
+            #region slowdown WARNING controls are bugged when slowdown
+            if (currentKeyboard.IsKeyDown(Keys.P)&& oldKeyboard.IsKeyUp(Keys.P))
+            {
+                freeze = !freeze;
+            }
+
+            if (freeze)
+            {
+                slowdown += 1;
+                if (slowdown == 10)
+                {
+                    slowdown = 0;
+                }
+            }
+
+            #endregion
+
+            if (slowdown == 0)
+            {
+                player.Update(oldKeyboard, currentKeyboard);
+            }
 
             base.Update(gameTime);
         }

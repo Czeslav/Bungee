@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -22,21 +23,23 @@ namespace Bungee
         private Rectangle rampRectangle;
         private Vector2 velocity = new Vector2(0);
 
-        //Ramp ramp;
+        private float angle;
 
+        StreamWriter log = new StreamWriter(@"C:/a.txt");
 
         public Player(Texture2D texture,Ramp ramp,Rectangle frame)
         {
             this.texture = texture;
             this.frame = frame;
             rampRectangle = ramp.rectangle;
-            //this.ramp = ramp;
 
+            #region creating rectangle for player
             startingRectangle = ramp.rectangle;
             startingRectangle.Height = texture.Height;
             startingRectangle.Width = texture.Width;
             startingRectangle.X = ramp.rectangle.Width - startingRectangle.Width;
             startingRectangle.Y = rampRectangle.Y - 50;
+            #endregion
 
 
             currentRectangle = startingRectangle;
@@ -76,6 +79,22 @@ namespace Bungee
 
             #endregion
 
+            #region rotating player
+
+            if (velocity.X != 0)
+            {
+                angle = (float)Math.Atan(velocity.Y / velocity.X);
+                angle *= 2;
+            }
+            else
+            {
+                angle = 0;
+            }
+
+            //log.WriteLine(velocity.X.ToString() + "   " + velocity.Y.ToString() + "   " + angle, ToString());
+
+            #endregion
+
             #region updating position
             currentRectangle.X += (int)velocity.X;
             currentRectangle.Y += (int)velocity.Y;
@@ -88,10 +107,13 @@ namespace Bungee
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(texture, currentRectangle, Color.White);
+            //spriteBatch.Draw(texture, currentRectangle, Color.White);
+                                                                            //
+            spriteBatch.Draw(texture, currentRectangle, null, Color.White, angle, new Vector2(texture.Width/2,texture.Height/2), SpriteEffects.None, 1);
+
             spriteBatch.DrawString(font, "player X - " + currentRectangle.X.ToString() + "\n" +
                                          "player Y - " + currentRectangle.Y.ToString() +"\n" +
-                                         "player velocity" + velocity.ToString(),new Vector2 (0,0), Color.White);
+                                         "player velocity" + velocity.ToString()+"\n",new Vector2 (0,0), Color.White);
 
             spriteBatch.End();
 
