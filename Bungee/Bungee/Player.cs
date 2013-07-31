@@ -36,6 +36,7 @@ namespace Bungee
             startingRectangle.Height = texture.Height;
             startingRectangle.Width = texture.Width;
             startingRectangle.X = ramp.rectangle.Width - startingRectangle.Width;
+            startingRectangle.Y = rampRectangle.Y - 50;
 
 
             currentRectangle = startingRectangle;
@@ -51,17 +52,27 @@ namespace Bungee
             }
             #endregion
 
+            #region jumping
             if (currentKeyboard.IsKeyDown(Keys.Up)&& oldKeyboard.IsKeyUp(Keys.Up))
             {
                 velocity.Y -= 10;
             }
+            #endregion
 
-            
             #region falling
             if (true)
             {
                 velocity.Y += 1;
             }
+            #endregion
+
+            #region collision detection
+
+            if (currentRectangle.Bottom+velocity.Y > rampRectangle.Top)
+            {
+                velocity = new Vector2(0);
+            }
+
             #endregion
 
             #region updating position
